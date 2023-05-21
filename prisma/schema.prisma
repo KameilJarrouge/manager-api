@@ -16,20 +16,51 @@ model User {
   password String @default("admin")
 }
 
-model Email {
-  id        Int       @id @default(autoincrement())
-  name      String
-  username  String
-  email     String
-  password  String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  Accounts  Account[]
+model Account {
+  id          Int          @id @default(autoincrement())
+  name        String
+  username    String
+  email       String
+  phoneNumber String
+  password    String
+  createdAt   DateTime     @default(now())
+  tags        AccountTag[]
 }
 
-model Account {
-  id           Int    @id @default(autoincrement())
-  website_name String
-  Email        Email? @relation(fields: [emailId], references: [id], onDelete: Cascade)
-  emailId      Int?
+model AccountTag {
+  id        Int      @id @default(autoincrement())
+  tag       String
+  Account   Account? @relation(fields: [accountId], references: [id])
+  accountId Int?
+}
+
+model Note {
+  id        Int       @id @default(autoincrement())
+  entry     String
+  createdAt DateTime  @default(now())
+  tags      NoteTag[]
+}
+
+model NoteTag {
+  id     Int    @id @default(autoincrement())
+  tag    String
+  Note   Note?  @relation(fields: [noteId], references: [id])
+  noteId Int?
+}
+
+model Diary {
+  id        Int      @id @default(autoincrement())
+  entry     String
+  createdAt DateTime
+}
+
+model Balance {
+  id      Int     @id @default(autoincrement())
+  balance Decimal
+}
+
+model Traffic {
+  id     Int     @id @default(autoincrement())
+  amount Decimal
+  note   String
 }
