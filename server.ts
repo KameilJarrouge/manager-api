@@ -2,22 +2,18 @@ import { PrismaClient } from "@prisma/client";
 import cors from "cors";
 import { decrypt, encrypt, handleKeyAccess } from "./encryption";
 import express from "express";
-// import multer from "multer";
 import jwt from "jsonwebtoken";
 import applyRouters from "./helpers/applyRouters";
 require("dotenv").config();
-// import path from "path";
 export const AUTHENTICATION_ERROR_401 = 401;
 export const AUTHORIZATION_ERROR_403 = 403;
-// export const upload = multer({ dest: "/temp" });
 export const prisma = new PrismaClient();
 
-const TestingMode = false;
+const TestingMode = true;
 const app = express();
-const PORT = 3002;
+const PORT = 3004;
 
 app.use(express.json());
-// app.use(express.static(path.resolve("./public")));
 app.use(
   cors({
     credentials: true,
@@ -26,16 +22,16 @@ app.use(
 );
 app.use(handleKeyAccess);
 
-app.get("/", async (req, res) => {
-  res.send(await prisma.email.findMany());
-  return;
+app.get("/init", async (req, res) => {
   await prisma.user.create({
     data: {
       username: "admin",
       password: encrypt("admin"),
     },
   });
+  res.send("Initialization Complete");
 });
+
 app.post("/login", async (req, res) => {
   const admin = await prisma.user.findFirst();
   if (

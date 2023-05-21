@@ -13,6 +13,7 @@ CREATE TABLE "Account" (
     "email" TEXT NOT NULL,
     "phoneNumber" TEXT NOT NULL,
     "password" TEXT NOT NULL,
+    "note" TEXT NOT NULL,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -21,7 +22,7 @@ CREATE TABLE "AccountTag" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "tag" TEXT NOT NULL,
     "accountId" INTEGER,
-    CONSTRAINT "AccountTag_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "Account" ("id") ON DELETE SET NULL ON UPDATE CASCADE
+    CONSTRAINT "AccountTag_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "Account" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -36,14 +37,14 @@ CREATE TABLE "NoteTag" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "tag" TEXT NOT NULL,
     "noteId" INTEGER,
-    CONSTRAINT "NoteTag_noteId_fkey" FOREIGN KEY ("noteId") REFERENCES "Note" ("id") ON DELETE SET NULL ON UPDATE CASCADE
+    CONSTRAINT "NoteTag_noteId_fkey" FOREIGN KEY ("noteId") REFERENCES "Note" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
 CREATE TABLE "Diary" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "entry" TEXT NOT NULL,
-    "createdAt" DATETIME NOT NULL
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- CreateTable
@@ -56,5 +57,6 @@ CREATE TABLE "Balance" (
 CREATE TABLE "Traffic" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "amount" DECIMAL NOT NULL,
-    "note" TEXT NOT NULL
+    "note" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

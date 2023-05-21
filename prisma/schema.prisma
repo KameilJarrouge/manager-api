@@ -23,6 +23,7 @@ model Account {
   email       String
   phoneNumber String
   password    String
+  note        String
   createdAt   DateTime     @default(now())
   tags        AccountTag[]
 }
@@ -30,7 +31,7 @@ model Account {
 model AccountTag {
   id        Int      @id @default(autoincrement())
   tag       String
-  Account   Account? @relation(fields: [accountId], references: [id])
+  Account   Account? @relation(fields: [accountId], references: [id], onDelete: Cascade)
   accountId Int?
 }
 
@@ -44,14 +45,14 @@ model Note {
 model NoteTag {
   id     Int    @id @default(autoincrement())
   tag    String
-  Note   Note?  @relation(fields: [noteId], references: [id])
+  Note   Note?  @relation(fields: [noteId], references: [id], onDelete: Cascade)
   noteId Int?
 }
 
 model Diary {
   id        Int      @id @default(autoincrement())
   entry     String
-  createdAt DateTime
+  createdAt DateTime @default(now())
 }
 
 model Balance {
@@ -60,7 +61,8 @@ model Balance {
 }
 
 model Traffic {
-  id     Int     @id @default(autoincrement())
-  amount Decimal
-  note   String
+  id        Int      @id @default(autoincrement())
+  amount    Decimal
+  note      String
+  createdAt DateTime @default(now())
 }

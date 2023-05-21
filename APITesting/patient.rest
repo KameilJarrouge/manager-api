@@ -1,7 +1,7 @@
 
 # testing endpoint
 
-GET http://localhost:3003/emails/1
+GET http://localhost:3004/init
 
 
 ###
