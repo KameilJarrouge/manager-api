@@ -9,13 +9,13 @@ const router = express.Router();
  *  tag => single tag for now
  *  searchKey => searching among the main columns
  */
-router.get("/", async (req, res) => {
+router.post("/", async (req, res) => {
   let conditions = {};
-  if (req.query.tag) {
+  if (req.query.tags) {
     conditions["tags"] = {
       some: {
         tag: {
-          contains: String(req.query.tag),
+          in: req.body.tags,
         },
       },
     };
@@ -38,10 +38,18 @@ router.get("/", async (req, res) => {
   res.send(result);
 });
 
+router.get("/tags", async (req, res) => {
+  let tags = await prisma.accountTag.findMany({
+    distinct: "tag",
+  });
+  res.send(tags);
+});
+
 router.post("/create", async (req, res) => {
   await prisma.account.create({
     data: {
       username: req.body.username,
+      iconUrl: req.body.iconUrl,
       email: req.body.email,
       name: req.body.name,
       phoneNumber: req.body.phoneNumber,
@@ -69,6 +77,7 @@ router.put("/:id/update", async (req, res) => {
   await prisma.account.update({
     data: {
       username: req.body.username,
+      iconUrl: req.body.iconUrl,
       email: req.body.email,
       name: req.body.name,
       phoneNumber: req.body.phoneNumber,
@@ -107,6 +116,7 @@ router.delete("/:id/delete", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   let result = await prisma.account.findFirst({
+    include: { tags: true },
     where: {
       id: Number(req.params.id),
     },

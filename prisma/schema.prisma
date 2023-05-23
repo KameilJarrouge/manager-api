@@ -19,6 +19,7 @@ model User {
 model Account {
   id          Int          @id @default(autoincrement())
   name        String
+  iconUrl     String
   username    String
   email       String
   phoneNumber String

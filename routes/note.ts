@@ -9,11 +9,11 @@ const router = express.Router();
  */
 router.get("/", async (req, res) => {
   let conditions = {};
-  if (req.query.tag) {
+  if (req.query.tags) {
     conditions["tags"] = {
       some: {
         tag: {
-          contains: String(req.query.tag),
+          in: req.body.tags,
         },
       },
     };
@@ -28,6 +28,13 @@ router.get("/", async (req, res) => {
     },
   });
   res.send(result);
+});
+
+router.get("/tags", async (req, res) => {
+  let tags = await prisma.noteTag.findMany({
+    distinct: "tag",
+  });
+  res.send(tags);
 });
 
 router.post("/create", async (req, res) => {
@@ -87,6 +94,9 @@ router.delete("/:id/delete", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   let result = await prisma.note.findFirst({
+    include: {
+      tags: true,
+    },
     where: {
       id: Number(req.params.id),
     },
